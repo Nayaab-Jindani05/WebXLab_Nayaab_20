@@ -1,203 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Page</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-        .form-container {
-            max-width: 500px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            font-size: 16px;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 8px;
-        }
-        input[type="text"], input[type="password"], input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-top: 5px;
-        }
-        input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-        }
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-        #username-error, #password-error {
-            color: red;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-        #college-suggestions {
-            margin-top: 5px;
-            padding: 5px;
-            max-height: 150px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-            display: none;
-            position: absolute;
-            width: 100%;
-            z-index: 10;
-        }
-        #college-suggestions div {
-            padding: 5px;
-            cursor: pointer;
-        }
-        #college-suggestions div:hover {
-            background-color: #ddd;
-        }
-        .form-group.relative {
-            position: relative;
-        }
-        #success-message {
-            color: green;
-            font-size: 16px;
-            margin-top: 20px;
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Register</title>
+  <style>
+    /* Global Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f2f2f2, #e1e1e1);
+      font-size: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-box {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      padding: 40px;
+      margin: 20px;
+    }
+
+    .form-box h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #333;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .input-group input:focus {
+      border-color: #4CAF50;
+    }
+
+    .input-group input::placeholder {
+      color: #aaa;
+    }
+
+    .input-group input:focus::placeholder {
+      color: #4CAF50;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.85em;
+    }
+
+    .success {
+      color: green;
+      font-size: 1em;
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    #suggestions {
+      position: absolute;
+      background-color: white;
+      border: 1px solid #ccc;
+      max-height: 100px;
+      overflow-y: auto;
+      width: 100%;
+      z-index: 100;
+      border-radius: 5px;
+    }
+
+    #suggestions div {
+      padding: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    #suggestions div:hover {
+      background-color: #f1f1f1;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
+  <div class="form-box">
+    <h2>Register</h2>
+    <form id="regForm">
+      <div class="input-group">
+        <label>Name</label>
+        <input type="text" id="name" required />
+      </div>
 
-    <div class="form-container">
-        <h2>Register</h2>
-        <form id="registrationForm">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="college">College:</label>
-                <div class="form-group relative">
-                    <input type="text" id="college" name="college" required oninput="showCollegeSuggestions()">
-                    <div id="college-suggestions">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required oninput="checkUsername()">
-                <div id="username-error"></div>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password:</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required oninput="checkPassword()">
-                <div id="password-error"></div>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Register" id="submitBtn">
-            </div>
-            <div id="success-message">Successfully Registered!</div>
-        </form>
-    </div>
+      <div class="input-group">
+        <label>College</label>
+        <input type="text" id="college" autocomplete="off" required />
+        <div id="suggestions"></div>
+      </div>
 
-    <script>
-        const existingUsernames = ["admin", "abc", "test", "new", "admin123"];
-        const colleges = [
-            "VESIT", "Don Bosco", "Saboo Siddik", "ST.Xaviers", "Somaiya",
-            "Father Agnels", "Vidyalankar", "VPM", "AP shah", "KC college"
-        ];
+      <div class="input-group">
+        <label>Username</label>
+        <input type="text" id="username" required />
+        <div id="usernameError" class="error"></div>
+      </div>
 
-        function checkUsername() {
-            const usernameInput = document.getElementById('username').value;
-            const errorDiv = document.getElementById('username-error');
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="password" required />
+      </div>
 
-            errorDiv.innerHTML = '';
+      <div class="input-group">
+        <label>Confirm Password</label>
+        <input type="password" id="confirmPassword" required />
+        <div id="passwordError" class="error"></div>
+      </div>
 
-            if (usernameInput) {
-                if (existingUsernames.includes(usernameInput)) {
-                    errorDiv.innerHTML = "Username already exists!";
-                } else {
-                    errorDiv.innerHTML = '';
-                }
-            }
-        }
+      <button type="submit">Register</button>
+    </form>
+    <div id="message" class="success"></div>
+  </div>
 
-        function showCollegeSuggestions() {
-            const collegeInput = document.getElementById('college').value;
-            const collegeSuggestionsDiv = document.getElementById('college-suggestions');
-            if (collegeInput) {
-                const matchedColleges = colleges.filter(college => college.toLowerCase().includes(collegeInput.toLowerCase()));
-                collegeSuggestionsDiv.innerHTML = matchedColleges.map(college => `<div>${college}</div>`).join('');
-                collegeSuggestionsDiv.style.display = matchedColleges.length > 0 ? 'block' : 'none';
-                
-                collegeSuggestionsDiv.querySelectorAll('div').forEach(div => {
-                    div.addEventListener('click', function() {
-                        document.getElementById('college').value = div.textContent;
-                        collegeSuggestionsDiv.style.display = 'none';
-                    });
-                });
-            } else {
-                collegeSuggestionsDiv.style.display = 'none';
-            }
-        }
+  <script>
+    // College suggestions
+    document.getElementById('college').addEventListener('input', function () {
+      const query = this.value.trim();
+      const container = document.getElementById('suggestions');
 
-        function checkPassword() {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const errorDiv = document.getElementById('password-error');
+      if (!query) {
+        container.innerHTML = '';
+        return;
+      }
 
-            if (password !== confirmPassword) {
-                errorDiv.innerHTML = "Passwords do not match!";
-            } else {
-                errorDiv.innerHTML = '';
-            }
-        }
-
-        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const name = document.getElementById('name').value;
-            const college = document.getElementById('college').value;
-
-            if (existingUsernames.includes(username)) {
-                document.getElementById('username-error').innerHTML = "Username is already taken!";
-            } else {
-                existingUsernames.push(username);
-                document.getElementById('success-message').style.display = 'block';
-                setTimeout(function() {
-                    document.getElementById('success-message').style.display = 'none';
-                }, 5000);
-                document.getElementById('registrationForm').reset();
-            }
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', `/suggest?q=${query}`, true);
+      xhr.onload = function () {
+        const suggestions = JSON.parse(xhr.responseText);
+        container.innerHTML = '';
+        suggestions.forEach(college => {
+          const div = document.createElement('div');
+          div.textContent = college;
+          div.onclick = () => {
+            document.getElementById('college').value = college;
+            container.innerHTML = '';
+          };
+          container.appendChild(div);
         });
-    </script>
+      };
+      xhr.send();
+    });
 
+    // Password match check
+    document.getElementById('confirmPassword').addEventListener('input', function () {
+      const pass = document.getElementById('password').value;
+      const confirm = this.value;
+      document.getElementById('passwordError').textContent =
+        pass === confirm ? '' : 'Passwords do not match';
+    });
+
+    // Username live check
+    document.getElementById('username').addEventListener('input', function () {
+      const username = this.value;
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/check-username', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function () {
+        const res = JSON.parse(xhr.responseText);
+        document.getElementById('usernameError').textContent =
+          res.exists ? 'Username already taken' : '';
+      };
+      xhr.send(JSON.stringify({ username }));
+    });
+
+    // Form submit
+    document.getElementById('regForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const college = document.getElementById('college').value;
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      const passwordError = document.getElementById('passwordError');
+      const usernameError = document.getElementById('usernameError');
+      const message = document.getElementById('message');
+
+      message.textContent = '';
+
+      if (password !== confirmPassword) {
+        passwordError.textContent = 'Passwords do not match';
+        return;
+      }
+
+      if (usernameError.textContent !== '') {
+        return;
+      }
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/register', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function () {
+        const res = JSON.parse(xhr.responseText);
+        if (res.success) {
+          message.textContent = 'Successfully Registered';
+          document.getElementById('regForm').reset();
+        }
+      };
+      xhr.send(JSON.stringify({ name, college, username, password }));
+    });
+  </script>
 </body>
 </html>
