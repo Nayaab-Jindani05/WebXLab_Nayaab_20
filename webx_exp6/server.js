@@ -1,32 +1,50 @@
 const express = require('express');
 const app = express();
-const cors = require('cors');
+const path = require('path');
+const PORT = 3000;
 
-// Middleware
 app.use(express.json());
-app.use(cors());
+app.use(express.static(__dirname)); 
 
-// Store existing users (simulated in-memory array)
-const users = [];
-const existingUsernames = ["john_doe", "jane_smith", "alice_williams", "bob_johnson", "susan_lee", "tom_clark", "lucy_jones", "mike_brown", "emma_davis", "liam_white"];
 
-// Registration route
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client.html')); 
+});
+
+// Static arrays
+let existingUsers = [
+  'admin', 'abc', 'xyz', 'test', 'user',
+  'nayaab'
+];
+
+const colleges = [
+  'VESIT', 'VPM', 'Somaiya', 'St.Xaviers', 'Saboo Siddik',
+  'Don Bosco', 'IITB', 'Terna', 'AP Shah', 'KC'
+];
+
+// Username live check
+app.post('/check-username', (req, res) => {
+  const { username } = req.body;
+  const exists = existingUsers.includes(username);
+  res.json({ exists });
+});
+
+// College suggestions
+app.get('/suggest', (req, res) => {
+  const q = req.query.q.toLowerCase();
+  const matches = colleges.filter(c => c.toLowerCase().includes(q));
+  res.json(matches);
+});
+
+// Register
 app.post('/register', (req, res) => {
-    const { name, college, username, password } = req.body;
-
-    // Check if username already exists
-    if (existingUsernames.includes(username)) {
-        return res.status(400).json({ message: "Username is already taken!" });
-    }
-
-    // Save new user (simulated)
-    users.push({ name, college, username, password });
-    existingUsernames.push(username);  // Add the new username to existing usernames array
-    res.status(201).json({ message: "Registration successful!" });
+  const { username } = req.body;
+  if (!existingUsers.includes(username)) {
+    existingUsers.push(username); 
+    res.json({ success: true });
+  } else {
+    res.json({ success: false });
+  }
 });
 
-// Start server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
